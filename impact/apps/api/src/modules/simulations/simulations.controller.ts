@@ -28,7 +28,7 @@ export class SimulationsController {
    * Returns immediately with the simulation ID.
    */
   @Post()
-  @ApiOperation({ summary: 'Create a new decision simulation' })
+  @ApiOperation({ summary: 'Create a new decision simulation (asynchronous queue)' })
   @ApiResponse({
     status: 202,
     description: 'Simulation queued successfully',
@@ -46,6 +46,20 @@ export class SimulationsController {
     @CurrentUser() user: AuthUser,
   ) {
     return this.simulationsService.createSimulation(dto, user);
+  }
+
+  /**
+   * POST /api/v1/simulations/preview
+   * Fast synchronous prospective preview simulation.
+   */
+  @Post('preview')
+  @ApiOperation({ summary: 'Run synchronous prospective preview simulation (immediate in-memory evaluation)' })
+  @ApiResponse({ status: 200, description: 'Prospective differential simulation output' })
+  async simulatePreview(
+    @Body() dto: CreateSimulationDto,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.simulationsService.simulatePreview(dto, user);
   }
 
   /**

@@ -101,6 +101,24 @@ export class SimulationProcessor extends WorkerHost {
         })
         .where(eq(schema.simulations.id, simulationId));
 
+      // Create immutable audit log entry
+      try {
+        await this.db.insert(schema.auditLogs).values({
+          institutionId,
+          action: 'SIMULATION_EXECUTED',
+          resourceType: 'simulation',
+          resourceId: simulationId,
+          metadata: {
+            scenarioType,
+            overallRisk: result.overallRisk,
+            riskScores: result.riskScores,
+            totalImpacts: result.impacts.length,
+          },
+        });
+      } catch (auditErr) {
+        this.logger.warn(`Failed to write audit log for simulation ${simulationId}: ${auditErr}`);
+      }
+
       this.logger.log(
         `Simulation ${simulationId} completed. Risk: ${result.overallRisk}`,
       );

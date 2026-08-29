@@ -97,6 +97,38 @@ export class SimulationsService {
   }
 
   /**
+   * Fast synchronous prospective preview simulation.
+   * Runs in-memory without queue delay for instant interactive calculator feedback.
+   */
+  async simulatePreview(
+    dto: CreateSimulationDto,
+    actor: AuthUser,
+  ) {
+    const institutionId = actor.institutionId;
+    const studentId = await this.resolveStudentId(dto, actor, institutionId);
+
+    // Build current student state snapshot
+    const studentState = await this.buildStudentState(studentId, institutionId);
+
+    // Load active rule engine
+    const engine = await this.loadRuleEngine(institutionId);
+
+    // Execute differential simulation
+    const result = engine.simulate(
+      studentState,
+      dto.type,
+      dto.parameters,
+    );
+
+    return {
+      ...result,
+      studentId,
+      disclaimer: SIMULATION_DISCLAIMER,
+      evaluatedAt: new Date().toISOString(),
+    };
+  }
+
+  /**
    * Retrieves a completed simulation with full impact detail.
    */
   async getSimulation(
