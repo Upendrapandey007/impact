@@ -1,6 +1,8 @@
-# Impact — Academic Decision Impact Platform
+# 🎓 Impact — Academic Decision Impact Platform
 
-> **Simulate academic decisions. Understand the consequences. Make informed choices.**
+> **Prospective Decision Intelligence & Compliance Infrastructure for Higher Education**
+
+Please refer to the master [README.md](../../README.md) at the repository root for full architectural diagrams, test matrices, and getting started guides.
 
 Impact connects to a university's student and financial-aid systems and evaluates the consequences of academic decisions before they happen.
 
