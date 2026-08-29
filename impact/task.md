@@ -96,18 +96,21 @@
 
 ---
 
-## 📋 Phase 5: Student Experience & Decision Calculator (Sprint 8)
+## 📋 Phase 5: Student Experience & Decision Calculator UI (Sprint 8)
 
-### Sprint 8: Interactive Decision Flow & Opportunity Explorer
-- [ ] **Decision Calculator Wizard:**
-  - [ ] Multi-step interactive flow: Decision Select → Course/Target Select → Reason → Real-Time Impact
-  - [ ] Step-by-step progressive disclosure (calculator feel, not forms)
-- [ ] **Simulation Result Views:**
-  - [ ] Differential Impact Cards (Rule → Data → Result breakdown with expandable trace)
-  - [ ] Policy evidence citation modal linking directly to highlighted policy text
-  - [ ] **"Explore Funding Alternatives" Drawer:**
-    - [ ] Shows matched student jobs, work-study positions, and eligible scholarships if aid is affected
-    - [ ] Clear application links, deadlines, and wage/award amounts
+### Sprint 8: Student Portal & Interactive Simulation Flow
+- [x] **Decision Calculator Wizard (`/simulate`):**
+  - [x] Multi-step interactive decision flow: Decision Type ➔ Target Course/Major ➔ Context ➔ Simulation
+  - [x] Live course selectors with credit badges and department tags
+  - [x] Target credit load range slider for `REDUCE_CREDITS` scenarios
+- [x] **Differential Impact Visualizer (`/simulate/:id`):**
+  - [x] High-contrast 4-tier risk status header (`Low`, `Moderate`, `High`, `Critical`)
+  - [x] Expandable Rule ➔ Data ➔ Result accordion cards with policy citations
+  - [x] Recommended action priority list with direct contact advisor triggers
+- [x] **"Explore Funding Alternatives" Drawer:**
+  - [x] Slide-over drawer with matched on-campus student jobs, work-study positions, and replacement scholarships
+  - [x] Filter tabs (`All`, `Student Jobs`, `Scholarships & Grants`) with match percentage indicators
+  - [x] Direct application external link buttons
 - [ ] **Mobile Optimization & WCAG 2.2 AA Compliance:**
   - [ ] Touch-friendly card gestures & bottom sheets for mobile browsers
   - [ ] Screen reader focus management & ARIA live regions for calculation updates
