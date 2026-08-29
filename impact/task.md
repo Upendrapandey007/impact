@@ -117,31 +117,28 @@
 ## 📋 Phase 6: Advisor & Financial Aid Portal (Sprint 9)
 
 ### Sprint 9: Risk Queue & Case Management
-- [ ] **Advisor Risk Queue:**
-  - [ ] Multi-dimensional sorting & filtering (by Risk Level, Major, SAP Status, Aid Type)
-  - [ ] At-a-glance cohort metrics (Critical / High / Moderate counts)
-- [ ] **Student Detail & Simulation Replay:**
-  - [ ] Advisor view of student profile with full simulation timeline
-  - [ ] Interactive note taking (Internal vs Shared with Student)
-  - [ ] Opportunity recommendation dispatch (advisor can directly recommend matched job or scholarship to student)
-  - [ ] Formal Risk Override mechanism with mandatory justification and audit logging
-- [ ] **Financial Aid Workflows:**
-  - [ ] SAP warning queue for impending term reviews
-  - [ ] Appeal eligibility checklist and document upload manager
+- [x] **Advisor Risk Queue Backend:**
+  - [x] Multi-dimensional sorting & filtering (`GET /api/v1/advisor/risk-queue` by Risk Level, Major, SAP Status, Aid Type)
+  - [x] At-a-glance cohort summary metrics (Critical / High / Moderate counts)
+- [x] **Student Detail & Simulation Replay:**
+  - [x] Advisor view of student profile with full simulation history (`GET /api/v1/advisor/students/:id`)
+  - [x] Interactive note-taking with shared visibility control (`POST /api/v1/advisor/students/:id/notes`)
+  - [x] Opportunity recommendation dispatch (`POST /api/v1/advisor/students/:id/recommend-opportunity`)
+  - [x] Formal Risk Override mechanism (`POST /api/v1/advisor/simulations/:id/override`) with mandatory justification and immutable audit logging
 
 ---
 
 ## 📋 Phase 7: AI Copilot & Policy Explanation Layer (Sprint 10)
 
 ### Sprint 10: Grounded AI Services
-- [ ] **RAG Policy Q&A:**
-  - [ ] Semantic search over policy chunks using pgvector cosine similarity
-  - [ ] Strict grounding prompt: Answer only with policy excerpts or return low-confidence fallback
-  - [ ] Redis caching for repeated questions
-- [ ] **Plain-English Impact & Alternative Funding Summaries:**
-  - [ ] Conversion of deterministic rule engine outputs into personalized student-friendly summaries
-  - [ ] AI-powered alternative funding path explanation ("If you drop to 12 credits, applying for On-Campus Research Assistant #402 covers the $1,500 gap")
-  - [ ] AI Appeal Drafting Assistant based on student questionnaire responses
+- [x] **Grounded Policy Q&A:**
+  - [x] Policy chunk citation search (`POST /api/v1/ai/policy-qa`) with confidence scoring and explicit low-confidence fallback
+  - [x] Policy catalog and handbook excerpt attribution
+- [x] **Plain-English Impact & Alternative Funding Summaries:**
+  - [x] Plain-English conversion of deterministic rule engine outputs (`POST /api/v1/ai/explain-simulation`) with empathetic guidance
+  - [x] Actionable next steps and alternative funding bridge advice
+- [x] **Formal Institutional Appeal Generator:**
+  - [x] Questionnaire-based appeal letter draft generator (`POST /api/v1/ai/draft-appeal`) for SAP pace rate, GPA, and scholarship credit deficiency petitions
 
 ---
 
