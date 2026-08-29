@@ -1,5 +1,3 @@
-'use client';
-
 import {
   AlertTriangle,
   BookOpen,
@@ -11,6 +9,7 @@ import {
   Info,
   Phone,
   Shield,
+  Sparkles,
   TrendingUp,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -18,6 +17,7 @@ import { useState } from 'react';
 
 import type { ImpactCategory, RiskLevel } from '@impact/types';
 import { RiskBadge } from '../ui/RiskBadge';
+import { OpportunityDrawer } from './OpportunityDrawer';
 
 // ─── Mock data — replace with API call via TanStack Query ──────────────────
 const MOCK_SIMULATION = {
@@ -106,6 +106,7 @@ const MOCK_SIMULATION = {
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export function SimulationResultPage({ simulationId }: { simulationId: string }) {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const sim = MOCK_SIMULATION; // TODO: replace with useQuery
 
   const changedImpacts = sim.impacts.filter((i) => i.changed);
@@ -209,6 +210,30 @@ export function SimulationResultPage({ simulationId }: { simulationId: string })
           </div>
         </div>
 
+        {/* ─── Alternative Funding Callout ──────────────────────────────── */}
+        <div className="mb-8 rounded-2xl border border-[--color-brand-500]/30 bg-gradient-to-r from-[--color-brand-500]/10 via-[--color-surface-elevated] to-[--color-surface-card] p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-lg">
+          <div className="flex items-center gap-3.5">
+            <div className="p-3 rounded-xl bg-[--color-brand-500]/20 text-[--color-brand-400]">
+              <Sparkles className="h-6 w-6" />
+            </div>
+            <div>
+              <h3 className="text-base font-bold text-[--color-text-primary]">
+                3 Funding Alternatives Available
+              </h3>
+              <p className="text-xs text-[--color-text-muted] mt-0.5">
+                We matched on-campus student jobs & replacement grants that could offset the $2,500 scholarship gap.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => setIsDrawerOpen(true)}
+            className="inline-flex items-center gap-2 rounded-xl bg-[--color-brand-500] px-5 py-2.5 text-xs font-bold text-white transition-all shadow-[0_0_20px_-5px_oklch(58%_0.2_260)] hover:bg-[--color-brand-600] shrink-0"
+          >
+            <span>Explore Alternatives</span>
+            <ExternalLink className="h-3.5 w-3.5" />
+          </button>
+        </div>
+
         {/* ─── Changed Impacts ──────────────────────────────────────────── */}
         {changedImpacts.length > 0 && (
           <div className="mb-8">
@@ -266,10 +291,22 @@ export function SimulationResultPage({ simulationId }: { simulationId: string })
                     Contact
                   </button>
                 )}
+                {action.action === 'EXPLORE_ALTERNATIVES' && (
+                  <button
+                    onClick={() => setIsDrawerOpen(true)}
+                    className="shrink-0 rounded-lg bg-[--color-surface-elevated] border border-[--color-brand-500]/40 text-[--color-brand-400] px-4 py-2 text-sm font-medium transition-colors hover:bg-[--color-brand-500]/10"
+                  >
+                    <Sparkles className="inline h-3.5 w-3.5 mr-1" />
+                    View Matches
+                  </button>
+                )}
               </div>
             ))}
           </div>
         </div>
+
+        {/* ─── Opportunity Drawer ──────────────────────────────────────── */}
+        <OpportunityDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
 
         {/* ─── Disclaimer ───────────────────────────────────────────────── */}
         <div
