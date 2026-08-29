@@ -1,0 +1,91 @@
+version: '3.9'
+
+services:
+  # ─── PostgreSQL with pgvector ──────────────────────────────────────────────
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: impact_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: impact
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d impact']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── Redis ────────────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: impact_redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── NestJS API ───────────────────────────────────────────────────────────
+  api:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/api.Dockerfile
+    container_name: impact_api
+    restart: unless-stopped
+    env_file:
+      - ../../apps/api/.env.local
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/impact
+      REDIS_URL: redis://redis:6379
+      NODE_ENV: development
+    ports:
+      - '3001:3001'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ../../apps/api:/app/apps/api:delegated
+      - /app/node_modules
+    command: npm run dev --workspace=apps/api
+
+  # ─── Next.js Web ──────────────────────────────────────────────────────────
+  web:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/web.Dockerfile
+    container_name: impact_web
+    restart: unless-stopped
+    env_file:
+      - ../../apps/web/.env.local
+    environment:
+      NEXT_PUBLIC_API_URL: http://api:3001
+      NODE_ENV: development
+    ports:
+      - '3000:3000'
+    depends_on:
+      - api
+    volumes:
+      - ../../apps/web:/app/apps/web:delegated
+      - /app/node_modules
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  default:
+    name: impact_network

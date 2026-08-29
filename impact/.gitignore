@@ -1,0 +1,20 @@
+# Impact — Academic Decision Impact Platform
+
+node_modules/
+dist/
+.next/
+.turbo/
+*.log
+.env
+.env.local
+.env.*.local
+coverage/
+*.tsbuildinfo
+.DS_Store
+Thumbs.db
+*.pem
+*.key
+*.crt
+uploads/
+.idea/
+.vscode/settings.json
